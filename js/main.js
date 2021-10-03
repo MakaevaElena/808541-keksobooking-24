@@ -24,3 +24,104 @@ function getRandomArbitrary(min, max, count) {
   return RandomNum.toFixed(count); // toFixed() округляет дробную часть до count знаков после запятой.
 }
 getRandomArbitrary(3.45,96.567,2); // Временный вызов функции
+
+const TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungalow',
+  'hotel',
+];
+
+const CHECKIN_OUTS = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
+
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+
+const PHOTOS = [
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
+];
+
+const TITLES = [
+  'Сдам квартиру',
+  'Квартира около метро',
+  'Квартира в тихом центре',
+];
+
+const DESCRIPTIONS = [
+    'Самый уютный номер',
+    'Номер для молодоженов',
+    'Тихие и комфортные номера для Вас',
+];
+
+const location = {
+  lat: _.random(35.65000, 35.70000),
+  lng: _.random(139.70000, 139.80000),
+};
+
+const MAX_ROOMS = 10;
+const MAX_GUESTS = 15;
+const MAX_PRICE = 100000;
+const COUNT_OFFERS = 10;
+
+const USER =[1,2,3,4,5,6,7,8,9,10];
+
+// функция по поиску случайного элемента в переданном массиве.
+const getRandomArrayElement = (elements) => {
+  return elements[_.random(0, elements.length - 1)];
+  };
+
+const createAuthor = () => {
+  const userNum = getRandomArrayElement(USER);
+   if(userNum < 10){
+   let number = '0' + userNum;}
+   number = userNum;
+  return {
+    avatar: 'img/avatars/user' + number + '.png',
+  };
+};
+
+const createOffer = () => {
+  return {
+    title: getRandomArrayElement(TITLES),
+    adress: location.lat  + ', ' + location.lng,
+    price: _.random(1, MAX_PRICE100000),
+    type: getRandomArrayElement(TYPES),
+    rooms: _.random(1, MAX_ROOMS),
+    guests: _.random(1, MAX_GUESTS),
+    checkin:getRandomArrayElement(CHECKIN_OUTS),
+    checkout: getRandomArrayElement(CHECKIN_OUTS),
+    //  Значения не должны повторяться. КАК?
+    features: (_.shuffle(FEATURES)).slice(0,getRandomArrayElement(FEATURES)),
+    description: getRandomArrayElement(DESCRIPTIONS),
+    photos:(_.shuffle(PHOTOS)).slice(0,getRandomArrayElement(PHOTOS)),
+  };};
+
+const createLocation = () => {
+  return {
+    lat: _.random(35.65000, 35.70000),
+    lng: _.random(139.70000, 139.80000),
+    };}
+
+const createAdvertisment = () => {
+   newLocation = createLocation(),
+   newAuthor = createAuthor(),
+   newOffer = createOffer(newLocation),
+  }
+
+// сгенерировать случайные объекты и заполнить ими массив.
+const similarAdvertisments = Array.from({length: COUNT_OFFERS}, createAdvertisment);
+
+console.log(similarAdvertisments);
