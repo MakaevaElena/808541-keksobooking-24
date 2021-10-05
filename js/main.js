@@ -9,7 +9,7 @@ function getRandomIntInclusive(min, max) {
   max = Math.floor(max); // округление вниз
   return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
 }
-getRandomIntInclusive(3,8); // Временный вызов функции
+getRandomIntInclusive(3, 8); // Временный вызов функции
 
 
 //Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
@@ -23,7 +23,7 @@ function getRandomArbitrary(min, max, count) {
   const RandomNum = Math.random() * (max - min) + min; // получаем случайное число в интервале.
   return RandomNum.toFixed(count); // toFixed() округляет дробную часть до count знаков после запятой.
 }
-getRandomArbitrary(3.45,96.567,2); // Временный вызов функции
+getRandomArbitrary(3.45, 96.567, 2); // Временный вызов функции
 
 const TYPES = [
   'palace',
@@ -61,14 +61,14 @@ const TITLES = [
 ];
 
 const DESCRIPTIONS = [
-    'Самый уютный номер',
-    'Номер для молодоженов',
-    'Тихие и комфортные номера для Вас',
+  'Самый уютный номер',
+  'Номер для молодоженов',
+  'Тихие и комфортные номера для Вас',
 ];
 
-const location = {
-  lat: _.random(35.65000, 35.70000),
-  lng: _.random(139.70000, 139.80000),
+const LOCATION = {
+  lat: getRandomArbitrary(35.65000, 35.70000, 5),
+  lng: getRandomArbitrary(139.70000, 139.80000, 5),
 };
 
 const MAX_ROOMS = 10;
@@ -76,52 +76,68 @@ const MAX_GUESTS = 15;
 const MAX_PRICE = 100000;
 const COUNT_OFFERS = 10;
 
-const USER =[1,2,3,4,5,6,7,8,9,10];
+const USERS_COUNT = 10;
+const userIdList = [];
+for (let id = 1; id <= USERS_COUNT; id++) {
+  userIdList.push(id);
+}
 
 // функция по поиску случайного элемента в переданном массиве.
-const getRandomArrayElement = (elements) => {
-  return elements[_.random(0, elements.length - 1)];
-  };
+// const getRandomArrayElement = (elements) => {
+//   return elements[getRandomIntInclusive(0, elements.length - 1)];
+// };
+
+const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, elements.length - 1)];
 
 const createAuthor = () => {
-  const userNum = getRandomArrayElement(USER);
-   if(userNum < 10){
-   let number = '0' + userNum;}
-   number = userNum;
+  const userNum = getRandomArrayElement(userIdList);
+  let number;   // объявила number вне функции
+  if (userNum < 10) {
+    number = `${0}userNum`; // шаблонная строка
+  }
+  number = userNum;
   return {
-    avatar: 'img/avatars/user' + number + '.png',
+    // avatar: 'img/avatars/user' + number + '.png',
+    avatar: `img/avatars/user${number}.png`, // шаблонная строка
   };
 };
 
-const createOffer = () => {
-  return {
-    title: getRandomArrayElement(TITLES),
-    adress: location.lat  + ', ' + location.lng,
-    price: _.random(1, MAX_PRICE100000),
-    type: getRandomArrayElement(TYPES),
-    rooms: _.random(1, MAX_ROOMS),
-    guests: _.random(1, MAX_GUESTS),
-    checkin:getRandomArrayElement(CHECKIN_OUTS),
-    checkout: getRandomArrayElement(CHECKIN_OUTS),
-    //  Значения не должны повторяться. КАК?
-    features: (_.shuffle(FEATURES)).slice(0,getRandomArrayElement(FEATURES)),
-    description: getRandomArrayElement(DESCRIPTIONS),
-    photos:(_.shuffle(PHOTOS)).slice(0,getRandomArrayElement(PHOTOS)),
-  };};
+const createOffer = () => ({    //eslint требует arrow-body-style
+  title: getRandomArrayElement(TITLES),
+  adress: `${LOCATION.lat},${LOCATION.lng}`,// шаблонная строка
+  price: getRandomIntInclusive(1, MAX_PRICE),
+  type: getRandomArrayElement(TYPES),
+  rooms: getRandomIntInclusive(1, MAX_ROOMS),
+  guests: getRandomIntInclusive(1, MAX_GUESTS),
+  checkin: getRandomArrayElement(CHECKIN_OUTS),
+  checkout: getRandomArrayElement(CHECKIN_OUTS),
+  //  Значения не должны повторяться. КАК?
+  features: (_.shuffle(FEATURES)).slice(0, getRandomArrayElement(FEATURES)),
+  description: getRandomArrayElement(DESCRIPTIONS),
+  photos: (_.shuffle(PHOTOS)).slice(0, getRandomArrayElement(PHOTOS)),
 
-const createLocation = () => {
-  return {
-    lat: _.random(35.65000, 35.70000),
-    lng: _.random(139.70000, 139.80000),
-    };}
+}
+);
 
+const createLocation = () => ({                     //arrow-body-style
+  lat: getRandomArbitrary(35.65000, 35.70000, 5),
+  lng: getRandomArbitrary(139.70000, 139.80000, 5),
+}
+);
+
+// функция возвращает обьекты(данные) все вместе, для одного случайного обьявления.
 const createAdvertisment = () => {
-   newLocation = createLocation(),
-   newAuthor = createAuthor(),
-   newOffer = createOffer(newLocation),
-  }
+  const newLocation = createLocation();
+  const newAuthor = createAuthor();
+  const newOffer = createOffer(newLocation);
+  return {
+    author: newAuthor,
+    offer: newOffer,
+    location: newLocation,
+  };
+};
 
-// сгенерировать случайные объекты и заполнить ими массив.
-const similarAdvertisments = Array.from({length: COUNT_OFFERS}, createAdvertisment);
+// сгенерировать случайные объекты(обьявления) и заполнить ими массив.
+const similarAdvertisments = Array.from({ length: COUNT_OFFERS }, createAdvertisment);
 
-console.log(similarAdvertisments);
+print(similarAdvertisments);   // eslint просит убрать console.log ,заменила на print.
