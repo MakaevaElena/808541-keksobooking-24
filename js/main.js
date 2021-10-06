@@ -66,10 +66,8 @@ const DESCRIPTIONS = [
   'Тихие и комфортные номера для Вас',
 ];
 
-const LOCATION = {
-  lat: getRandomArbitrary(35.65000, 35.70000, 5),
-  lng: getRandomArbitrary(139.70000, 139.80000, 5),
-};
+const LAT = getRandomArbitrary(35.65000, 35.70000, 5);
+const LNG = getRandomArbitrary(139.70000, 139.80000, 5);
 
 const MAX_ROOMS = 10;
 const MAX_GUESTS = 15;
@@ -83,39 +81,35 @@ for (let id = 1; id <= USERS_COUNT; id++) {
 }
 
 // функция по поиску случайного элемента в переданном массиве.
-// const getRandomArrayElement = (elements) => {
-//   return elements[getRandomIntInclusive(0, elements.length - 1)];
-// };
-
 const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, elements.length - 1)];
 
 const createAuthor = () => {
   const userNum = getRandomArrayElement(userIdList);
-  let number;   // объявила number вне функции
+  let number; // объявила number вне условия
   if (userNum < 10) {
     number = `${0}userNum`; // шаблонная строка
   }
   number = userNum;
+  // https://learn.javascript.ru/array-methods
+  // вырезать из массива 1 элемент на позиции number-1  - не работает
+  userIdList.splice(number - 1, 1);
   return {
-    // avatar: 'img/avatars/user' + number + '.png',
     avatar: `img/avatars/user${number}.png`, // шаблонная строка
   };
 };
 
 const createOffer = () => ({    //eslint требует arrow-body-style
   title: getRandomArrayElement(TITLES),
-  adress: `${LOCATION.lat},${LOCATION.lng}`,// шаблонная строка
+  adress: `${LAT},${LNG}`,
   price: getRandomIntInclusive(1, MAX_PRICE),
   type: getRandomArrayElement(TYPES),
   rooms: getRandomIntInclusive(1, MAX_ROOMS),
   guests: getRandomIntInclusive(1, MAX_GUESTS),
   checkin: getRandomArrayElement(CHECKIN_OUTS),
   checkout: getRandomArrayElement(CHECKIN_OUTS),
-  //  Значения не должны повторяться. КАК?
   features: (_.shuffle(FEATURES)).slice(0, getRandomArrayElement(FEATURES)),
   description: getRandomArrayElement(DESCRIPTIONS),
   photos: (_.shuffle(PHOTOS)).slice(0, getRandomArrayElement(PHOTOS)),
-
 }
 );
 
