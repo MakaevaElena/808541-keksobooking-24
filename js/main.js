@@ -70,6 +70,19 @@ const MAX_GUESTS = 15;
 const MAX_PRICE = 100000;
 const COUNT_OFFERS = 10;
 
+const LOCATION = {
+  lat: {
+    min: 35.65000,
+    max: 35.70000,
+  },
+  lng: {
+    min: 139.70000,
+    max: 139.80000,
+  },
+  round: 5,
+};
+
+
 const USERS_COUNT = 10;
 const userIdList = [];
 for (let id = 1; id <= USERS_COUNT; id++) {
@@ -90,34 +103,35 @@ const createAuthor = () => {
 const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, elements.length - 1)];
 
 // функция создания перемешанного массива случайной длины
-const createSliceArray = (array) => {
+const createSlicedArray = (array) => {
   // const newArray = array.slice();   // полное копирование массива в новый массив
   const randomLenght = getRandomIntInclusive(1, array.length); // случайное число в пределах длины массива
   return _.shuffle(array).slice(0, randomLenght); // перемешать и обрезать случайную длину.
 };
 
-const createLocation = () => ({                     //arrow-body-style
-  lat: getRandomArbitrary(35.65000, 35.70000, 5),
-  lng: getRandomArbitrary(139.70000, 139.80000, 5),
+const createLocation = () => ({
+  locationlat: getRandomArbitrary(LOCATION.lat.min, LOCATION.lat.max, LOCATION.round),
+  locationLng: getRandomArbitrary(LOCATION.lng.min, LOCATION.lng.max, LOCATION.round),
 }
 );
 
 const createOffer = () => ({
   title: getRandomArrayElement(TITLES),
-  adress: createLocation(),
+  address: `${location.lat},${location.lng}`,
+
   price: getRandomIntInclusive(1, MAX_PRICE),
   type: getRandomArrayElement(TYPES),
   rooms: getRandomIntInclusive(1, MAX_ROOMS),
   guests: getRandomIntInclusive(1, MAX_GUESTS),
   checkin: getRandomArrayElement(CHECKIN_OUTS),
   checkout: getRandomArrayElement(CHECKIN_OUTS),
-  features: createSliceArray(FEATURES),
+  features: createSlicedArray(FEATURES),
   description: getRandomArrayElement(DESCRIPTIONS),
-  photos: createSliceArray(PHOTOS),
+  photos: createSlicedArray(PHOTOS),
 }
 );
 
-// функция возвращает обьекты(данные) все вместе, для одного случайного обьявления.
+//функция возвращает обьекты(данные) все вместе, для одного случайного обьявления.
 const createAdvertisment = () => {
   const newLocation = createLocation();
   const newAuthor = createAuthor();
