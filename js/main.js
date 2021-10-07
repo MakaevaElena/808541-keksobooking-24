@@ -11,7 +11,6 @@ function getRandomIntInclusive(min, max) {
 }
 getRandomIntInclusive(3, 8); // Временный вызов функции
 
-
 //Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
 //https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 //https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed
@@ -66,9 +65,6 @@ const DESCRIPTIONS = [
   'Тихие и комфортные номера для Вас',
 ];
 
-const LAT = getRandomArbitrary(35.65000, 35.70000, 5);
-const LNG = getRandomArbitrary(139.70000, 139.80000, 5);
-
 const MAX_ROOMS = 10;
 const MAX_GUESTS = 15;
 const MAX_PRICE = 100000;
@@ -77,41 +73,28 @@ const COUNT_OFFERS = 10;
 const USERS_COUNT = 10;
 const userIdList = [];
 for (let id = 1; id <= USERS_COUNT; id++) {
+  if (id < 10) {
+    id = `0${id}`;
+  }
   userIdList.push(id);
 }
+
+const createAuthor = () => {
+  const number = userIdList.shift();
+  return {
+    avatar: `img/avatars/user${number}.png`,
+  };
+};
 
 // функция по поиску случайного элемента в переданном массиве.
 const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, elements.length - 1)];
 
-const createAuthor = () => {
-  const userNum = getRandomArrayElement(userIdList);
-  let number; // объявила number вне условия
-  if (userNum < 10) {
-    number = `${0}userNum`; // шаблонная строка
-  }
-  number = userNum;
-  // https://learn.javascript.ru/array-methods
-  // вырезать из массива 1 элемент на позиции number-1  - не работает
-  userIdList.splice(number - 1, 1);
-  return {
-    avatar: `img/avatars/user${number}.png`, // шаблонная строка
-  };
+// функция создания перемешанного массива случайной длины
+const createSliceArray = (array) => {
+  // const newArray = array.slice();   // полное копирование массива в новый массив
+  const randomLenght = getRandomIntInclusive(1, array.length); // случайное число в пределах длины массива
+  return _.shuffle(array).slice(0, randomLenght); // перемешать и обрезать случайную длину.
 };
-
-const createOffer = () => ({    //eslint требует arrow-body-style
-  title: getRandomArrayElement(TITLES),
-  adress: `${LAT},${LNG}`,
-  price: getRandomIntInclusive(1, MAX_PRICE),
-  type: getRandomArrayElement(TYPES),
-  rooms: getRandomIntInclusive(1, MAX_ROOMS),
-  guests: getRandomIntInclusive(1, MAX_GUESTS),
-  checkin: getRandomArrayElement(CHECKIN_OUTS),
-  checkout: getRandomArrayElement(CHECKIN_OUTS),
-  features: (_.shuffle(FEATURES)).slice(0, getRandomArrayElement(FEATURES)),
-  description: getRandomArrayElement(DESCRIPTIONS),
-  photos: (_.shuffle(PHOTOS)).slice(0, getRandomArrayElement(PHOTOS)),
-}
-);
 
 const createLocation = () => ({                     //arrow-body-style
   lat: getRandomArbitrary(35.65000, 35.70000, 5),
@@ -119,11 +102,26 @@ const createLocation = () => ({                     //arrow-body-style
 }
 );
 
+const createOffer = () => ({
+  title: getRandomArrayElement(TITLES),
+  adress: createLocation(),
+  price: getRandomIntInclusive(1, MAX_PRICE),
+  type: getRandomArrayElement(TYPES),
+  rooms: getRandomIntInclusive(1, MAX_ROOMS),
+  guests: getRandomIntInclusive(1, MAX_GUESTS),
+  checkin: getRandomArrayElement(CHECKIN_OUTS),
+  checkout: getRandomArrayElement(CHECKIN_OUTS),
+  features: createSliceArray(FEATURES),
+  description: getRandomArrayElement(DESCRIPTIONS),
+  photos: createSliceArray(PHOTOS),
+}
+);
+
 // функция возвращает обьекты(данные) все вместе, для одного случайного обьявления.
 const createAdvertisment = () => {
   const newLocation = createLocation();
   const newAuthor = createAuthor();
-  const newOffer = createOffer(newLocation);
+  const newOffer = createOffer();
   return {
     author: newAuthor,
     offer: newOffer,
@@ -134,4 +132,5 @@ const createAdvertisment = () => {
 // сгенерировать случайные объекты(обьявления) и заполнить ими массив.
 const similarAdvertisments = Array.from({ length: COUNT_OFFERS }, createAdvertisment);
 
-print(similarAdvertisments);   // eslint просит убрать console.log ,заменила на print.
+similarAdvertisments;   // временное использование.
+
