@@ -110,12 +110,12 @@ const createSlicedArray = (array) => {
 };
 
 const createLocation = () => ({
-  locationlat: getRandomArbitrary(LOCATION.lat.min, LOCATION.lat.max, LOCATION.round),
-  locationLng: getRandomArbitrary(LOCATION.lng.min, LOCATION.lng.max, LOCATION.round),
+  lat: getRandomArbitrary(LOCATION.lat.min, LOCATION.lat.max, LOCATION.round),
+  lng: getRandomArbitrary(LOCATION.lng.min, LOCATION.lng.max, LOCATION.round),
 }
 );
 
-const createOffer = () => ({
+const createOffer = (location) => ({
   title: getRandomArrayElement(TITLES),
   address: `${location.lat},${location.lng}`,
 
@@ -135,7 +135,7 @@ const createOffer = () => ({
 const createAdvertisment = () => {
   const newLocation = createLocation();
   const newAuthor = createAuthor();
-  const newOffer = createOffer();
+  const newOffer = createOffer(newLocation);
   return {
     author: newAuthor,
     offer: newOffer,
