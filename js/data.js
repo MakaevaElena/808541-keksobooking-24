@@ -111,5 +111,4 @@ const createAdvertisment = () => {
 // сгенерировать случайные объекты(обьявления) и заполнить ими массив.
 const externalData = Array.from({ length: COUNT_OFFERS }, createAdvertisment);
 
-
 export { externalData };

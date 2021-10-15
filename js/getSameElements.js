@@ -23,40 +23,43 @@ const offerKeys = {
 };
 
 const similarListElement = document.querySelector('#map-canvas'); // будем временно вставлять в карту
-const similarAdvertismentTemplate = document.querySelector('#card').content.querySelector('popup'); //нашли шаблон
+const similarAdvertismentTemplate = document.querySelector('#card').content.querySelector('.popup'); //нашли шаблон
 
-const similarAdsByTemp = externalData();
+const similarAdsByTemp = externalData;
 const similarListFragment = document.createDocumentFragment(); // создали фрагмент
 
-const popupAdsByTemp = () => {
+const popupAdsByTemp = (dataList) => {
+
 
   const element = similarAdvertismentTemplate.cloneNode(true); //клонируем шаблон
 
-  Object.keys(similarAdsByTemp.offer).forEach((key) => { // проверка на наличие элементов
+  Object.keys(dataList.offer).forEach((key) => { // проверка на наличие элементов
     if (!key) {
       element.querySelector(`.popup__${offerKeys[key]}`).classListAdd('hidden');
     }
   });
 
-  element.querySelector('.popup__title').textContent = similarAdsByTemp.offer.title;
-  element.querySelector('.popup__text--address').textContent = similarAdsByTemp.offer.address;
-  element.querySelector('.popup__text--price').textContent = `${similarAdsByTemp.offer.price}₽/ночь`;
-  element.querySelector('.popup__type').textContent = rusTypes[similarAdsByTemp.offer.type];
-  element.querySelector('.popup__text--capacity').textContent = `${similarAdsByTemp.offer.rooms} комнаты для ${similarAdsByTemp.offer.guests} гостей`;
-  element.querySelector('.popup__text--time').textContent = `Заезд после ${similarAdsByTemp.offer.checkin}, выезд до ${similarAdsByTemp.offer.checkout}`;
+  element.querySelector('.popup__title').textContent = dataList.offer.title;
+  element.querySelector('.popup__text--address').textContent = dataList.offer.address;
+  element.querySelector('.popup__text--price').textContent = `${dataList.offer.price}₽/ночь`;
+  element.querySelector('.popup__type').textContent = rusTypes[dataList.offer.type];
+  element.querySelector('.popup__text--capacity').textContent = `${dataList.offer.rooms} комнаты для ${dataList.offer.guests} гостей`;
+  element.querySelector('.popup__text--time').textContent = `Заезд после ${dataList.offer.checkin}, выезд до ${dataList.offer.checkout}`;
 
   // В список .popup__features выведите все доступные удобства в объявлении.
-  const tempFeaturesList = similarAdvertismentTemplate.querySelectorAll('.popup__features');// нашли блок features
-  const tempFeatures = tempFeaturesList.querySelectorAll('popup__feature');//нашли все элементы feature
+  const tempFeaturesList = similarAdvertismentTemplate.querySelector('.popup__features');// нашли блок features
+  const tempFeatures = tempFeaturesList.querySelectorAll('.popup__feature');//нашли все элементы feature
+  // console.log(tempFeatures);
   tempFeatures.forEach((tempFeature) => {
-    const isNessesary = similarAdsByTemp.offer.features.some(
-      (feature) => tempFeature.classlist.contains(`.popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
+    console.log(tempFeature);
+    const isNessesary = dataList.offer.features.some(
+      (feature) => tempFeature.classlist.contains(`popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
     if (!isNessesary) {
       tempFeature.remove();
     }
   });
 
-  element.querySelector('.popup__description').textContent = similarAdsByTemp.offer.description;
+  element.querySelector('.popup__description').textContent = dataList.offer.description;
 
   // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как атрибут src соответствующего изображения.
   const popupPhotos = similarAdvertismentTemplate.querySelector('.popup__photos');
@@ -72,12 +75,12 @@ const popupAdsByTemp = () => {
     }
     popupPhotos.appendChild(img);
   });
-  element.querySelector('.popup__photos').src = similarAdsByTemp.photos;
+  element.querySelector('.popup__photos').src = dataList.photos;
 
-  if (!similarAdsByTemp.author.avatar) {
+  if (!dataList.author.avatar) {
     element.querySelector('.popup__avatar').classListAdd('hidden');
   }
-  element.querySelector('.popup__avatar').src = similarAdsByTemp.author.avatar;
+  element.querySelector('.popup__avatar').src = dataList.author.avatar;
 
   similarListFragment.appendChild(element);
 };

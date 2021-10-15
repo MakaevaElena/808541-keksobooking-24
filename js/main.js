@@ -3,4 +3,4 @@ import { similarListElement, popupAdsByTemp } from './getSameElements.js';
 import './getSameElements.js';
 
 similarListElement;     // временное использование.
-popupAdsByTemp(externalData);
+popupAdsByTemp(externalData[1]);
