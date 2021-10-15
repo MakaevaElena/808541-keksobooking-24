@@ -1,8 +1,6 @@
+import { externalData } from './data.js';
+import { similarListElement, popupAdsByTemp } from './getSameElements.js';
+import './getSameElements.js';
 
-import { similarAdvertisments } from './data.js';
-
-similarAdvertisments;   // временное использование.
-
-// console.log(similarAdvertisments);
-
-import './getSameElements';
+similarListElement;     // временное использование.
+popupAdsByTemp(externalData);

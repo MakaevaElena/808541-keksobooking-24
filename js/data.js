@@ -109,7 +109,7 @@ const createAdvertisment = () => {
 };
 
 // сгенерировать случайные объекты(обьявления) и заполнить ими массив.
-const similarAdvertisments = Array.from({ length: COUNT_OFFERS }, createAdvertisment);
+const externalData = Array.from({ length: COUNT_OFFERS }, createAdvertisment);
 
 
-export { similarAdvertisments };
+export { externalData };
