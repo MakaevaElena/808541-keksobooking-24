@@ -1,4 +1,4 @@
-import { externalData } from './data.js';
+// import { externalData } from './data.js';
 
 const rusTypes = {    // словарь
   flat: 'Квартира',
@@ -25,7 +25,7 @@ const offerKeys = {
 const similarListElement = document.querySelector('#map-canvas'); // будем временно вставлять в карту
 const similarAdvertismentTemplate = document.querySelector('#card').content.querySelector('.popup'); //нашли шаблон
 
-const similarAdsByTemp = externalData;
+// const similarAdsByTemp = externalData;
 const similarListFragment = document.createDocumentFragment(); // создали фрагмент
 
 const popupAdsByTemp = (dataList) => {
@@ -51,9 +51,9 @@ const popupAdsByTemp = (dataList) => {
   const tempFeatures = tempFeaturesList.querySelectorAll('.popup__feature');//нашли все элементы feature
   // console.log(tempFeatures);
   tempFeatures.forEach((tempFeature) => {
-    console.log(tempFeature);
+    // console.log(tempFeature);
     const isNessesary = dataList.offer.features.some(
-      (feature) => tempFeature.classlist.contains(`popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
+      (feature) => tempFeature.classList.contains(`popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
     if (!isNessesary) {
       tempFeature.remove();
     }
@@ -64,7 +64,7 @@ const popupAdsByTemp = (dataList) => {
   // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как атрибут src соответствующего изображения.
   const popupPhotos = similarAdvertismentTemplate.querySelector('.popup__photos');
   popupPhotos.innerHTML = '';
-  similarAdsByTemp.offer.photos.forEach((photo) => {
+  dataList.offer.photos.forEach((photo) => {
     const img = document.createElement('img');
     img.classList.add('popup__photo');
     img.src = photo;
