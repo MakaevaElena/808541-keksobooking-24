@@ -22,10 +22,9 @@ const offerKeys = {
   photos: 'photos',
 };
 
-const similarListElement = document.querySelector('#map-canvas'); // будем временно вставлять в карту
+const similarListElement = document.querySelector('#map-canvas');
 const similarAdvertismentTemplate = document.querySelector('#card').content.querySelector('.popup'); //нашли шаблон
 
-// const similarAdsByTemp = externalData;
 const similarListFragment = document.createDocumentFragment(); // создали фрагмент
 
 const popupAdsByTemp = (dataList) => {
@@ -47,11 +46,9 @@ const popupAdsByTemp = (dataList) => {
   element.querySelector('.popup__text--time').textContent = `Заезд после ${dataList.offer.checkin}, выезд до ${dataList.offer.checkout}`;
 
   // В список .popup__features выведите все доступные удобства в объявлении.
-  const tempFeaturesList = similarAdvertismentTemplate.querySelector('.popup__features');// нашли блок features
+  const tempFeaturesList = element.querySelector('.popup__features');// нашли блок features
   const tempFeatures = tempFeaturesList.querySelectorAll('.popup__feature');//нашли все элементы feature
-  // console.log(tempFeatures);
   tempFeatures.forEach((tempFeature) => {
-    // console.log(tempFeature);
     const isNessesary = dataList.offer.features.some(
       (feature) => tempFeature.classList.contains(`popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
     if (!isNessesary) {
@@ -61,21 +58,23 @@ const popupAdsByTemp = (dataList) => {
 
   element.querySelector('.popup__description').textContent = dataList.offer.description;
 
-  // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как атрибут src соответствующего изображения.
-  const popupPhotos = similarAdvertismentTemplate.querySelector('.popup__photos');
-  popupPhotos.innerHTML = '';
-  dataList.offer.photos.forEach((photo) => {
+  const tempPhotoList = element.querySelector('.popup__photos');
+  const tempPhotos = tempPhotoList.querySelector('.popup__photo');
+
+  // tempPhotoList.innerHTML = '';
+
+  for (let i = 0; i < dataList.offer.photos.length; i++) {
+
     const img = document.createElement('img');
     img.classList.add('popup__photo');
-    img.src = photo;
+    img.src = dataList.offer.photos[i];
+    img.alt = 'Фотография жилья';
     img.width = 45;
-    img.height = 40;
-    if (!img.src) {
-      photo.remove();
-    }
-    popupPhotos.appendChild(img);
-  });
-  element.querySelector('.popup__photos').src = dataList.photos;
+    img.height = 30;
+
+    tempPhotoList.appendChild(img);
+  }
+  tempPhotos.remove();
 
   if (!dataList.author.avatar) {
     element.querySelector('.popup__avatar').classListAdd('hidden');
@@ -83,8 +82,8 @@ const popupAdsByTemp = (dataList) => {
   element.querySelector('.popup__avatar').src = dataList.author.avatar;
 
   similarListFragment.appendChild(element);
+
+  similarListElement.appendChild(similarListFragment); // добавили в блок карты
 };
 
-similarListElement.appendChild(similarListFragment);
-
-export { similarListElement, popupAdsByTemp };
+export { popupAdsByTemp };
