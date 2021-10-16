@@ -34,7 +34,7 @@ const popupAdsByTemp = (dataList) => {
 
   Object.keys(dataList.offer).forEach((key) => { // проверка на наличие элементов
     if (!key) {
-      element.querySelector(`.popup__${offerKeys[key]}`).classListAdd('hidden');
+      element.querySelector(`.popup__${offerKeys[key]}`).classList.add('hidden');
     }
   });
 
@@ -77,7 +77,7 @@ const popupAdsByTemp = (dataList) => {
   tempPhotos.remove();
 
   if (!dataList.author.avatar) {
-    element.querySelector('.popup__avatar').classListAdd('hidden');
+    element.querySelector('.popup__avatar').classList.add('hidden');
   }
   element.querySelector('.popup__avatar').src = dataList.author.avatar;
 
