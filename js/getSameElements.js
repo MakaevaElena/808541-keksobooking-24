@@ -70,7 +70,7 @@ const popupAdsByTemp = (dataList) => {
     img.src = dataList.offer.photos[i];
     img.alt = 'Фотография жилья';
     img.width = 45;
-    img.height = 30;
+    img.height = 40;
 
     tempPhotoList.appendChild(img);
   }

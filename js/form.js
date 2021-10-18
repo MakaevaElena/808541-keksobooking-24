@@ -3,33 +3,38 @@ const mapFilters = document.querySelector('.map__filters');
 
 const doFormDisable = (form) => {
   form.classList.add(`${form.classList[0]}--disabled`); //дописывает к первому классу
-  form.children.classList.add('disabled');
 
-  form.children.forEach((element) => {
+  for (const element of form.children) {
     element.classList.add('disabled');
-  });
+  }
 
   const fieldset = form.querySelectorAll('fieldset');
-  fieldset.classList.add('disabled');
-  fieldset.children.classList.add('disabled');
+  fieldset.forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+
+  const fieldsetChildren = Array.from(form.querySelectorAll('fieldset'));
+  fieldsetChildren.forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
 };
 
 const doFormActive = (form) => {
   form.classList.remove(`${form.classList[0]}--disabled`);
-  form.children.classList.remove('disabled');
 
-  form.children.forEach((element) => {
+  for (const element of form.children) {
     element.classList.remove('disabled');
-  });
+  }
 
   const fieldset = form.querySelectorAll('fieldset');
-  fieldset.classList.remove('disabled');
-  fieldset.children.classList.remove('disabled');
+  fieldset.forEach((element) => {
+    element.removeAttribute('disabled', 'disabled');
+  });
+
+  const fieldsetChildren = Array.from(form.querySelectorAll('fieldset'));
+  fieldsetChildren.forEach((element) => {
+    element.removeAttribute('disabled', 'disabled');
+  });
 };
 
-doFormDisable(adForm);
-doFormDisable(mapFilters);
-doFormActive(adForm);
-doFormActive(mapFilters);
-
-export { doFormDisable, doFormActive };
+export { adForm, mapFilters, doFormDisable, doFormActive };
