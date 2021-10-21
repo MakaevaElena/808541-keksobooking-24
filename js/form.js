@@ -31,6 +31,8 @@ const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
+const MAX_GUESTS = '100';
+const MIN_GUESTS = '0';
 
 const selectMinPrice = () => {
   price.min = GLOSSARY_TYPES[type.value].price;
@@ -39,15 +41,13 @@ const selectMinPrice = () => {
 type.addEventListener('change', selectMinPrice);
 
 title.addEventListener('input', () => {
+  title.setCustomValidity('');
+  title.style = '';
   if (title.value.length > MAX_TITLE_LENGTH) {
     title.setCustomValidity(`Заголовок должен быть меньше ${MAX_TITLE_LENGTH}`);
   }
-  else if (title.value.length < MIN_TITLE_LENGTH) {
+  if (title.value.length < MIN_TITLE_LENGTH) {
     title.setCustomValidity(`Заголовок должен быть больше ${MIN_TITLE_LENGTH}`);
-  }
-  else {
-    title.setCustomValidity('');
-    title.style = '';
   }
   title.reportValidity();
 });
@@ -59,7 +59,7 @@ type.addEventListener('change', () => {
     price.setCustomValidity(`Цена должна быть не менее ${Number(GLOSSARY_TYPES[type.value].price)}`);
   }
   if (Number(price.value) > Number(price.max)) {
-    { price.setCustomValidity(`Цена должна быть не более ${Number(price.max)}`); }
+    price.setCustomValidity(`Цена должна быть не более ${Number(price.max)}`);
   }
   price.reportValidity();
 });
@@ -71,8 +71,8 @@ roomNumber.addEventListener('change', () => {
     roomNumber.setCustomValidity('количество комнат недостаточно');
     roomNumber.style = 'border: 2px solid red';
   }
-  if (roomNumber.value === '100') {
-    capacity.value = '0';
+  if (roomNumber.value === MAX_GUESTS) {
+    capacity.value = MIN_GUESTS;
     capacity.setCustomValidity('не для гостей');
   }
   roomNumber.reportValidity();
@@ -85,8 +85,8 @@ capacity.addEventListener('change', () => {
     capacity.setCustomValidity('для указанного количества гостей комнат недостаточно');
     capacity.style = 'border: 2px solid red';
   }
-  if (roomNumber.value === '100') {
-    capacity.value = '0';
+  if (roomNumber.value === MAX_GUESTS) {
+    capacity.value = MIN_GUESTS;
     capacity.setCustomValidity('не для гостей');
     roomNumber.setCustomValidity('не для гостей');
   }
