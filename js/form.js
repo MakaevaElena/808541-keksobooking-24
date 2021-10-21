@@ -51,7 +51,7 @@ title.addEventListener('input', () => {
   }
   title.reportValidity();
 });
-
+//синхронизация типа жилья и цены за ночь
 type.addEventListener('change', () => {
   price.setCustomValidity('');
   price.style = '';
@@ -92,7 +92,7 @@ capacity.addEventListener('change', () => {
   }
   capacity.reportValidity();
 });
-
+// синхронизация времени
 timeOut.addEventListener('change', () => {
   timeIn.value = timeOut.value;
 });
