@@ -1,12 +1,4 @@
-// import { externalData } from './data.js';
-
-const rusTypes = {    // словарь
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
-};
+import { GLOSSARY_TYPES } from './data.js';
 
 const offerKeys = {
   title: 'title',
@@ -41,7 +33,8 @@ const popupAdsByTemp = (dataList) => {
   element.querySelector('.popup__title').textContent = dataList.offer.title;
   element.querySelector('.popup__text--address').textContent = dataList.offer.address;
   element.querySelector('.popup__text--price').textContent = `${dataList.offer.price}₽/ночь`;
-  element.querySelector('.popup__type').textContent = rusTypes[dataList.offer.type];
+  // element.querySelector('.popup__type').textContent = rusTypes[dataList.offer.type];
+  element.querySelector('.popup__type').textContent = GLOSSARY_TYPES[dataList.offer.type].rus;
   element.querySelector('.popup__text--capacity').textContent = `${dataList.offer.rooms} комнаты для ${dataList.offer.guests} гостей`;
   element.querySelector('.popup__text--time').textContent = `Заезд после ${dataList.offer.checkin}, выезд до ${dataList.offer.checkout}`;
 
