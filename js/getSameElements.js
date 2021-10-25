@@ -1,5 +1,8 @@
 import { GLOSSARY_TYPES } from './data.js';
 
+const IMG_WIDTH = 45;
+const IMG_HEIGHT = 40;
+
 const offerKeys = {
   title: 'title',
   address: 'text--address',
@@ -14,13 +17,12 @@ const offerKeys = {
   photos: 'photos',
 };
 
-const similarListElement = document.querySelector('#map-canvas');
+// const similarListElement = document.querySelector('#map-canvas');
 const similarAdvertismentTemplate = document.querySelector('#card').content.querySelector('.popup'); //нашли шаблон
 
-const similarListFragment = document.createDocumentFragment(); // создали фрагмент
+// const similarListFragment = document.createDocumentFragment(); // создали фрагмент
 
 const popupAdsByTemp = (dataList) => {
-
 
   const element = similarAdvertismentTemplate.cloneNode(true); //клонируем шаблон
 
@@ -62,8 +64,8 @@ const popupAdsByTemp = (dataList) => {
     img.classList.add('popup__photo');
     img.src = dataList.offer.photos[i];
     img.alt = 'Фотография жилья';
-    img.width = 45;
-    img.height = 40;
+    img.width = IMG_WIDTH;
+    img.height = IMG_HEIGHT;
 
     tempPhotoList.appendChild(img);
   }
@@ -74,10 +76,10 @@ const popupAdsByTemp = (dataList) => {
   }
   element.querySelector('.popup__avatar').src = dataList.author.avatar;
 
-  similarListFragment.appendChild(element);
+  // similarListFragment.appendChild(element);
 
   // similarListElement.appendChild(similarListFragment); // добавили в блок карты
-  return similarListFragment;
+  return element;
 };
 
 export { popupAdsByTemp };

@@ -2,38 +2,47 @@ import { externalData } from './data.js';
 import { adForm } from './form.js';
 import { popupAdsByTemp } from './getSameElements.js';
 
-
+const MAIN_ICON_URL = 'img/main-pin.svg';
+const MAIN_ICON_SIZE = [52, 52];
+const MAIN_ICON_ANHOR = [26, 52];
+const MARKER_URL = 'img/pin.svg';
+const MARKER_SIZE = [40, 40];
+const MARKER_ANHOR = [20, 40];
 const resetButton = document.querySelector('#reset');
 const address = adForm.querySelector('#address');
+const MAIN_LAT = 35.65952;
+const MAIN_LNG = 139.78179;
+const RANGE_NUM = 5;
+const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const ZOOM = 16;
 
-// const createMap = () => {
-// подставляем карту в блок map-canvas
 const map = L.map('map-canvas')
   .on('load', () => { // подсписка на события
   })
   .setView({ //параметры отображения карты — центр и масштаб.
-    lat: 35.65952,
+    lat: MAIN_LAT,
     lng: 139.78179,
   }, 10);
 
 // изображения карт
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  TILE_LAYER,
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution: ATTRIBUTION,
   },
 ).addTo(map);
 
 const mainPinIcon = L.icon({// добавили свою иконку svg
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: MAIN_ICON_URL,
+  iconSize: MAIN_ICON_SIZE,
+  iconAnchor: MAIN_ICON_ANHOR,
 });
 
 const mainPinMarker = L.marker( //добавление метки
   {
-    lat: 35.65952,
-    lng: 139.78179,
+    lat: MAIN_LAT,
+    lng: MAIN_LNG,
   },
   {
     draggable: true,
@@ -45,18 +54,18 @@ mainPinMarker.addTo(map); //добавить метку на карту
 
 mainPinMarker.on('moveend', (evt) => {
   const { lat, lng } = evt.target.getLatLng();
-  address.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+  address.value = `${lat.toFixed(RANGE_NUM)}, ${lng.toFixed(RANGE_NUM)}`;
 });
 
 resetButton.addEventListener('click', () => { //вернуть иконку на исходное место
   mainPinMarker.setLatLng({
-    lat: 35.65952,
-    lng: 139.78179,
+    lat: MAIN_LAT,
+    lng: MAIN_LNG,
   });
   map.setView({//вернуть исходный масштаб
-    lat: 35.65952,
-    lng: 139.78179,
-  }, 16);
+    lat: MAIN_LAT,
+    lng: MAIN_LNG,
+  }, ZOOM);
 });
 
 // mainPinMarker.remove(); //удалить метку с карты
@@ -68,9 +77,9 @@ const createMarker = (points) => {//добавление своей иконки
     const lat = points[i].location.lat;
     const lng = points[i].location.lng;
     const icon = L.icon({
-      iconUrl: 'img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      iconUrl: MARKER_URL,
+      iconSize: MARKER_SIZE,
+      iconAnchor: MARKER_ANHOR,
     });
 
     const marker = L.marker(//создание всех меток
@@ -85,29 +94,5 @@ const createMarker = (points) => {//добавление своей иконки
     marker.addTo(markerGroup) //добавление всех меток на карту map / в слой markerGroup
       .bindPopup(popupAdsByTemp(points[i]));//привяжем к каждой нашей метке балун
   }
-  // points.forEach((point) => {
-  //   const lat = point.location.lat;
-  //   const lng = point.location.lng;
-  //   const icon = L.icon({
-  //     iconUrl: 'img/pin.svg',
-  //     iconSize: [40, 40],
-  //     iconAnchor: [20, 40],
-  //   });
-
-  //   const marker = L.marker(//создание всех меток
-  //     {
-  //       lat,
-  //       lng,
-  //     },
-  //     {
-  //       icon,
-  //     },
-  //   );
-  //   marker.addTo(markerGroup) //добавление всех меток на карту map / в слой markerGroup
-  //     .bindPopup(popupAdsByTemp(point));//привяжем к каждой нашей метке балун
-  // });
-
-  // markerGroup.clearLayers(); // удалить слой с метками
-  // };
 };
 export { createMarker };
