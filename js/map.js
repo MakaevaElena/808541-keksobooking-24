@@ -43,9 +43,9 @@ const mainPinMarker = L.marker( //добавление метки
 
 mainPinMarker.addTo(map); //добавить метку на карту
 
-//текущие координаты в поле формы
 mainPinMarker.on('moveend', (evt) => {
-  address.value = evt.target.getLatLng();
+  const { lat, lng } = evt.target.getLatLng();
+  address.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 });
 
 resetButton.addEventListener('click', () => { //вернуть иконку на исходное место
@@ -82,16 +82,32 @@ const createMarker = (points) => {//добавление своей иконки
         icon,
       },
     );
-
     marker.addTo(markerGroup) //добавление всех меток на карту map / в слой markerGroup
-      .bindPopup(popupAdsByTemp(externalData[i]));//привяжем к каждой нашей метке балун
-
+      .bindPopup(popupAdsByTemp(points[i]));//привяжем к каждой нашей метке балун
   }
   // points.forEach((point) => {
-  //   createMarker(point);
+  //   const lat = point.location.lat;
+  //   const lng = point.location.lng;
+  //   const icon = L.icon({
+  //     iconUrl: 'img/pin.svg',
+  //     iconSize: [40, 40],
+  //     iconAnchor: [20, 40],
+  //   });
+
+  //   const marker = L.marker(//создание всех меток
+  //     {
+  //       lat,
+  //       lng,
+  //     },
+  //     {
+  //       icon,
+  //     },
+  //   );
+  //   marker.addTo(markerGroup) //добавление всех меток на карту map / в слой markerGroup
+  //     .bindPopup(popupAdsByTemp(point));//привяжем к каждой нашей метке балун
   // });
 
   // markerGroup.clearLayers(); // удалить слой с метками
+  // };
 };
-// };
 export { createMarker };
