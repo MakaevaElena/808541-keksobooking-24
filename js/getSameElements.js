@@ -76,7 +76,8 @@ const popupAdsByTemp = (dataList) => {
 
   similarListFragment.appendChild(element);
 
-  similarListElement.appendChild(similarListFragment); // добавили в блок карты
+  // similarListElement.appendChild(similarListFragment); // добавили в блок карты
+  return similarListFragment;
 };
 
 export { popupAdsByTemp };
