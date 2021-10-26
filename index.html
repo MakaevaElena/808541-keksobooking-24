@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+<link rel="stylesheet" href="leaflet/leaflet.css">
 
 <head>
   <meta charset="utf-8">
@@ -78,7 +79,6 @@
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <!-- добавили адрес сервера -->
       <form class="ad-form" method="post" action="https://24.javascript.pages.academy/keksobooking"
         enctype="multipart/form-data" autocomplete="off">
         <fieldset class="ad-form-header">
@@ -88,7 +88,6 @@
               <img src="img/muffin-grey.svg" alt="Аватар пользователя" width="40" height="44">
             </div>
             <div class="ad-form__field">
-              <!-- только изображения -->
               <input type="file" id="avatar" name="avatar" class="ad-form-header__input visually-hidden"
                 accept="image/*">
               <label class="ad-form-header__drop-zone" for="avatar">Загрузить<br>фото...</label>
@@ -100,14 +99,12 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <!-- обязательное поле , от 30 до 100 символов -->
           <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30"
             maxlength="100" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <!-- адрес только для чтения, координаты цифрами -->
-          <input id="address" name="address" type="number" readonly>
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -121,7 +118,6 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <!-- обязательное поле -->
           <input id="price" name="price" type="number" placeholder="5000" min="0" max='1000000' required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
@@ -186,7 +182,6 @@
           <label class="ad-form__label">Фотография жилья</label>
           <div class="ad-form__photo-container">
             <div class="ad-form__upload">
-              <!-- только изображения -->
               <input type="file" id="images" name="images" class="ad-form__input visually-hidden" accept="image/*">
               <label for="images" class="ad-form__drop-zone">Загрузить<br>фото...</label>
             </div>
@@ -261,6 +256,7 @@
   </template>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
   <script type="module" src="js/main.js"></script>
+  <script src="leaflet/leaflet.js"></script>
 </body>
 
 </html>
