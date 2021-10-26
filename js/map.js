@@ -51,9 +51,10 @@ mainPinMarker.on('move', (evt) => {
   address.value = `${lat.toFixed(RANGE_NUM)}, ${lng.toFixed(RANGE_NUM)}`;
 });
 
-resetButton.addEventListener('click', () => {
+resetButton.addEventListener('click', (evt) => {
   mainPinMarker.setLatLng(DEFAULT_LAT_LNG);
   map.setView(DEFAULT_LAT_LNG, ZOOM);
+  evt.preventDefault();
   address.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
 });
 
