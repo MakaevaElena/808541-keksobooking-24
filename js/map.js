@@ -51,12 +51,16 @@ mainPinMarker.on('move', (evt) => {
   address.value = `${lat.toFixed(RANGE_NUM)}, ${lng.toFixed(RANGE_NUM)}`;
 });
 
-resetButton.addEventListener('click', (evt) => {
-  mainPinMarker.setLatLng(DEFAULT_LAT_LNG);
-  map.setView(DEFAULT_LAT_LNG, ZOOM);
-  evt.preventDefault();
-  address.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
-});
+const setReset = () => {
+  resetButton.addEventListener('click', (evt) => {
+    mainPinMarker.setLatLng(DEFAULT_LAT_LNG);
+    map.setView(DEFAULT_LAT_LNG, ZOOM);
+    evt.preventDefault();
+    adForm.reset();
+    address.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
+  });
+};
+setReset();
 
 const markerGroup = L.layerGroup().addTo(map);
 
@@ -79,4 +83,4 @@ const createMarker = (points) => {
       .bindPopup(popupAdsByTemp(points[i]));
   }
 };
-export { createMarker };
+export { createMarker, DEFAULT_LAT_LNG, address };

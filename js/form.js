@@ -1,4 +1,6 @@
 import { GLOSSARY_TYPES } from './data.js';
+import { sendData } from './api.js';
+// import {DEFAULT_LAT_LNG,address} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
@@ -51,9 +53,8 @@ title.addEventListener('input', () => {
   }
   title.reportValidity();
 });
-//синхронизация типа жилья и цены за ночь
+//синхронизация типа жилья и цены
 type.addEventListener('change', () => {
-  price.setCustomValidity('');
   price.style = '';
   if (Number(price.value) < Number(GLOSSARY_TYPES[type.value].price)) {
     price.setCustomValidity(`Цена должна быть не менее ${Number(GLOSSARY_TYPES[type.value].price)}`);
@@ -61,6 +62,7 @@ type.addEventListener('change', () => {
   if (Number(price.value) > Number(price.max)) {
     price.setCustomValidity(`Цена должна быть не более ${Number(price.max)}`);
   }
+  price.setCustomValidity(''); // если перенести наверх - появляется баг, при вводе цены без переключения нет сравнения
   price.reportValidity();
 });
 
@@ -99,5 +101,60 @@ timeOut.addEventListener('change', () => {
 timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
 });
+
+// отправка формы на сервер
+const main = document.querySelector('main');
+
+const successMessageEscape = (evt) => {
+  const popUp = main.querySelector('.success');
+  evt.preventDefault();
+  if (evt.key === 'Escape') {
+    popUp.remove();
+  }
+  popUp.remove();
+  document.removeEventListener('keydown', successMessageEscape);
+};
+
+const errorMessageEscape = (evt) => {
+  const popUp = main.querySelector('.error');
+  evt.preventDefault();
+  if (evt.key === 'Escape') {
+    popUp.remove();
+  }
+  popUp.remove();
+  document.removeEventListener('keydown', errorMessageEscape);
+};
+
+const successMesage = document.querySelector('#success')
+  .content;
+const createSuccessMesage = () => {
+  const successPopUp = successMesage.cloneNode(true);
+  document.addEventListener('keydown', successMessageEscape);
+  document.addEventListener('click', successMessageEscape);
+  main.appendChild(successPopUp);
+};
+
+const errorMesage = document.querySelector('#error')
+  .content;
+const createErrorMesage = () => {
+  const errorPopUp = errorMesage.cloneNode(true);
+  document.addEventListener('keydown', errorMessageEscape);
+  document.addEventListener('click', errorMessageEscape);
+  main.appendChild(errorPopUp);
+};
+
+// const setUserFormSubmit = (onSubmit) => {
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  // createSuccessMesage();
+  sendData(
+    () => createSuccessMesage(),
+    () => createErrorMesage(),
+    new FormData(evt.target),
+  );
+  adForm.reset();
+  // address.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
+});
+// };
 
 export { adForm, mapFilters, doFormDisable, doFormActive };

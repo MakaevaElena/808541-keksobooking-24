@@ -23,10 +23,10 @@ const similarAdvertismentTemplate = document.querySelector('#card').content.quer
 // const similarListFragment = document.createDocumentFragment(); // создали фрагмент
 
 const popupAdsByTemp = (dataList) => {
-
   const element = similarAdvertismentTemplate.cloneNode(true); //клонируем шаблон
 
   Object.keys(dataList.offer).forEach((key) => { // проверка на наличие элементов
+    // console.log(key);
     if (!key) {
       element.querySelector(`.popup__${offerKeys[key]}`).classList.add('hidden');
     }
@@ -44,10 +44,12 @@ const popupAdsByTemp = (dataList) => {
   const tempFeaturesList = element.querySelector('.popup__features');// нашли блок features
   const tempFeatures = tempFeaturesList.querySelectorAll('.popup__feature');//нашли все элементы feature
   tempFeatures.forEach((tempFeature) => {
-    const isNessesary = dataList.offer.features.some(
-      (feature) => tempFeature.classList.contains(`popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
-    if (!isNessesary) {
-      tempFeature.remove();
+    if (dataList.offer.features) {
+      const isNessesary = dataList.offer.features.some(
+        (feature) => tempFeature.classList.contains(`popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
+      if (!isNessesary) {
+        tempFeature.remove();
+      }
     }
   });
 
@@ -57,19 +59,20 @@ const popupAdsByTemp = (dataList) => {
   const tempPhotos = tempPhotoList.querySelector('.popup__photo');
 
   // tempPhotoList.innerHTML = '';
+  if (dataList.offer.photos) {
+    for (let i = 0; i < dataList.offer.photos.length; i++) {
 
-  for (let i = 0; i < dataList.offer.photos.length; i++) {
+      const img = document.createElement('img');
+      img.classList.add('popup__photo');
+      img.src = dataList.offer.photos[i];
+      img.alt = 'Фотография жилья';
+      img.width = IMG_WIDTH;
+      img.height = IMG_HEIGHT;
 
-    const img = document.createElement('img');
-    img.classList.add('popup__photo');
-    img.src = dataList.offer.photos[i];
-    img.alt = 'Фотография жилья';
-    img.width = IMG_WIDTH;
-    img.height = IMG_HEIGHT;
-
-    tempPhotoList.appendChild(img);
+      tempPhotoList.appendChild(img);
+    }
+    tempPhotos.remove();
   }
-  tempPhotos.remove();
 
   if (!dataList.author.avatar) {
     element.querySelector('.popup__avatar').classList.add('hidden');
