@@ -1,4 +1,5 @@
 import { GLOSSARY_TYPES } from './data.js';
+import { sendData } from './api.js';
 
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
@@ -51,9 +52,8 @@ title.addEventListener('input', () => {
   }
   title.reportValidity();
 });
-//синхронизация типа жилья и цены за ночь
+//синхронизация типа жилья и цены
 type.addEventListener('change', () => {
-  price.setCustomValidity('');
   price.style = '';
   if (Number(price.value) < Number(GLOSSARY_TYPES[type.value].price)) {
     price.setCustomValidity(`Цена должна быть не менее ${Number(GLOSSARY_TYPES[type.value].price)}`);
@@ -61,6 +61,7 @@ type.addEventListener('change', () => {
   if (Number(price.value) > Number(price.max)) {
     price.setCustomValidity(`Цена должна быть не более ${Number(price.max)}`);
   }
+  price.setCustomValidity(''); // если перенести наверх - появляется баг, при вводе цены без переключения нет сравнения
   price.reportValidity();
 });
 
@@ -100,4 +101,59 @@ timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
 });
 
-export { adForm, mapFilters, doFormDisable, doFormActive };
+// отправка формы на сервер
+
+const successMessageEscape = (evt) => {
+  const popupSuccess = document.querySelector('.success');
+  evt.preventDefault();
+  if (evt.key === 'Escape') {
+    popupSuccess.remove();
+  }
+  popupSuccess.remove();
+  document.removeEventListener('keydown', successMessageEscape);
+  document.removeEventListener('click', successMessageEscape);
+};
+
+const errorMessageEscape = (evt) => {
+  const popupError = document.querySelector('.error');
+  evt.preventDefault();
+  if (evt.key === 'Escape') {
+    popupError.remove();
+  }
+  popupError.remove();
+  document.removeEventListener('keydown', errorMessageEscape);
+  document.removeEventListener('click', errorMessageEscape);
+};
+
+const successMesage = document.querySelector('#success')
+  .content;
+const createSuccessMesage = () => {
+  const successPopUp = successMesage.cloneNode(true);
+  document.addEventListener('keydown', successMessageEscape);
+  document.addEventListener('click', successMessageEscape);
+  document.body.appendChild(successPopUp);
+};
+
+const errorMesage = document.querySelector('#error')
+  .content;
+const createErrorMesage = () => {
+  const errorPopUp = errorMesage.cloneNode(true);
+  document.addEventListener('keydown', errorMessageEscape);
+  document.addEventListener('click', errorMessageEscape);
+  document.body.appendChild(errorPopUp);
+};
+
+// отправка формы и сброс
+const setUserFormSubmit = (callback) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => createSuccessMesage(),
+      () => createErrorMesage(),
+      new FormData(evt.target),
+    );
+    callback();
+  });
+};
+
+export { setUserFormSubmit, adForm, mapFilters, doFormDisable, doFormActive };

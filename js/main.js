@@ -1,14 +1,10 @@
-import { externalData } from './data.js';
-// import { popupAdsByTemp } from './getSameElements.js';
 import './getSameElements.js';
-import { adForm, mapFilters, doFormDisable, doFormActive } from './form.js';
-import { createMarker } from './map.js';
-
+import { setUserFormSubmit, adForm, mapFilters, doFormDisable } from './form.js';
+import { setReset, clearAll, map, afterLoad } from './map.js';
 
 doFormDisable(adForm);
 doFormDisable(mapFilters);
+map.on('load', afterLoad());
 
-createMarker(externalData);
-
-doFormActive(adForm);
-doFormActive(mapFilters);
+setReset();
+setUserFormSubmit(clearAll);
