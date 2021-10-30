@@ -1,6 +1,5 @@
 import { GLOSSARY_TYPES } from './data.js';
 import { sendData } from './api.js';
-// import {DEFAULT_LAT_LNG,address} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
@@ -103,26 +102,27 @@ timeIn.addEventListener('change', () => {
 });
 
 // отправка формы на сервер
-const main = document.querySelector('main');
 
 const successMessageEscape = (evt) => {
-  const popUp = main.querySelector('.success');
+  const popupSuccess = document.querySelector('.success');
   evt.preventDefault();
   if (evt.key === 'Escape') {
-    popUp.remove();
+    popupSuccess.remove();
   }
-  popUp.remove();
+  popupSuccess.remove();
   document.removeEventListener('keydown', successMessageEscape);
+  document.removeEventListener('click', successMessageEscape);
 };
 
 const errorMessageEscape = (evt) => {
-  const popUp = main.querySelector('.error');
+  const popupError = document.querySelector('.error');
   evt.preventDefault();
   if (evt.key === 'Escape') {
-    popUp.remove();
+    popupError.remove();
   }
-  popUp.remove();
+  popupError.remove();
   document.removeEventListener('keydown', errorMessageEscape);
+  document.removeEventListener('click', errorMessageEscape);
 };
 
 const successMesage = document.querySelector('#success')
@@ -131,7 +131,7 @@ const createSuccessMesage = () => {
   const successPopUp = successMesage.cloneNode(true);
   document.addEventListener('keydown', successMessageEscape);
   document.addEventListener('click', successMessageEscape);
-  main.appendChild(successPopUp);
+  document.body.appendChild(successPopUp);
 };
 
 const errorMesage = document.querySelector('#error')
@@ -140,21 +140,20 @@ const createErrorMesage = () => {
   const errorPopUp = errorMesage.cloneNode(true);
   document.addEventListener('keydown', errorMessageEscape);
   document.addEventListener('click', errorMessageEscape);
-  main.appendChild(errorPopUp);
+  document.body.appendChild(errorPopUp);
 };
 
-// const setUserFormSubmit = (onSubmit) => {
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  // createSuccessMesage();
-  sendData(
-    () => createSuccessMesage(),
-    () => createErrorMesage(),
-    new FormData(evt.target),
-  );
-  adForm.reset();
-  // address.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
-});
-// };
+// отправка формы и сброс
+const setUserFormSubmit = (callback) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => createSuccessMesage(),
+      () => createErrorMesage(),
+      new FormData(evt.target),
+    );
+    callback();
+  });
+};
 
-export { adForm, mapFilters, doFormDisable, doFormActive };
+export { setUserFormSubmit, adForm, mapFilters, doFormDisable, doFormActive };

@@ -1,22 +1,10 @@
 import './getSameElements.js';
-import { adForm, mapFilters, doFormDisable, doFormActive } from './form.js';
-import { createMarker } from './map.js';
-import { getData } from './api.js';
-import { showAlert } from './utils/util.js';
-
-const SIMILAR_ADS_COUNT = 5;
+import { setUserFormSubmit, adForm, mapFilters, doFormDisable } from './form.js';
+import { setReset, clearAll, map, afterLoad } from './map.js';
 
 doFormDisable(adForm);
 doFormDisable(mapFilters);
+map.on('load', afterLoad());
 
-doFormActive(adForm);
-doFormActive(mapFilters);
-
-// getData((dataList) => {
-//   createMarker(dataList.slice(0, SIMILAR_ADS_COUNT));
-// });
-
-getData(
-  (dataList) => createMarker(dataList.slice(0, SIMILAR_ADS_COUNT)),
-  () => showAlert('данные с сревера не получены'),
-);
+setReset();
+setUserFormSubmit(clearAll);

@@ -1,8 +1,20 @@
-const getData = (onSuccess) => {
+import { showAlert } from './utils/util.js';
+
+const getData = (onSuccess, onFail) => {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      else {
+        onFail();
+      }
+    })
     .then((serverData) => {
       onSuccess(serverData);
+    })
+    .catch(() => {
+      onFail(showAlert('данные с сревера не получены'));
     });
 };
 
