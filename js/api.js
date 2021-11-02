@@ -1,6 +1,7 @@
 import { showAlert } from './utils/util.js';
+// import { getFilteredOffers } from './filter.js';
 
-const getData = (onSuccess, onFail) => {
+const getData = (onSuccess, onFail, callback) => {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if (response.ok) {
@@ -11,7 +12,8 @@ const getData = (onSuccess, onFail) => {
       }
     })
     .then((serverData) => {
-      onSuccess(serverData);
+
+      onSuccess(serverData,callback);
     })
     .catch(() => {
       onFail(showAlert('данные с сревера не получены'));

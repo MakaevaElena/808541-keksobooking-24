@@ -2,6 +2,7 @@ import { adForm, doFormActive, mapFilters } from './form.js';
 import { popupAdsByTemp } from './getSameElements.js';
 import { getData } from './api.js';
 import { showAlert } from './utils/util.js';
+import { getFilteredOffers } from './filter.js';
 
 
 const DEFAULT_LAT_LNG = {
@@ -48,16 +49,22 @@ const createMarker = (points) => {
   }
 };
 
-const afterLoad = () => {
+const clearMarkerGroup = () => markerGroup.clearLayers();  //ф-я очистки слоя меток
+
+function afterLoad() {
   doFormActive(adForm);
   doFormActive(mapFilters);
   inputAddress.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
-  const SIMILAR_ADS_COUNT = 5;
+  // const SIMILAR_ADS_COUNT = 5;
   getData(
-    (dataList) => createMarker(dataList.slice(0, SIMILAR_ADS_COUNT)),
+    (dataList) => {
+      createMarker(dataList.slice());
+      getFilteredOffers(dataList.slice());
+    },
     () => showAlert('данные с сревера не получены'),
+    // (dataList) => getFilteredOffers(dataList.slice()),
   );
-};
+}
 
 L.tileLayer(
   TILE_LAYER,
@@ -98,4 +105,4 @@ const setReset = () => {
   });
 };
 
-export { setReset, clearAll, inputAddress, DEFAULT_LAT_LNG, map, afterLoad };
+export { setReset, clearAll, inputAddress, DEFAULT_LAT_LNG, map, afterLoad, clearMarkerGroup, createMarker };
