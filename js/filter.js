@@ -13,87 +13,58 @@ const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
 
 const housingFeatures = mapFilters.querySelector('#housing-features');
-const featureChecked = housingFeatures.querySelectorAll('[type="checkbox"]:checked');
 
 const getFilteredOffers = (offers) => {
 
-  const filterTypes = (cards) => {
-    if (housingType.value === DEFAULT_TYPE) {
-      return cards;
-    }
-    if (housingType.value !== DEFAULT_TYPE) {
-      cards = cards.filter((card) =>
-        card.offer.type === housingType.value || housingType.value === DEFAULT_TYPE);
-      return cards;
-    }
-  };
+  const filterTypes = (card) => housingType.value === DEFAULT_TYPE || housingType.value === card.offer.type;
 
   const PriceRange = {
     LOW: 10000,
     MIDDLE: 50000,
   };
 
-  const filterPrice = (cards) => {
-    if (housingPrice.value === DEFAULT_TYPE) {
-      return cards;
+  const filterPrice = (card) => {
+    switch (housingPrice.value) {
+      case DEFAULT_TYPE: return true;
+      case 'low': return card.offer.price < PriceRange.LOW;
+      case 'middle': return card.offer.price >= PriceRange.LOW && card.offer.price < PriceRange.MIDDLE;
+      case 'high': return card.offer.price >= PriceRange.MIDDLE;
+      default: return false;
     }
-
-    if (housingPrice.value === 'low') {
-      cards = cards.filter((card) =>
-        card.offer.price < PriceRange.LOW);
-      return cards;
-    }
-    if (housingPrice.value === 'middle') {
-      cards = cards.filter((card) =>
-        card.offer.price >= PriceRange.LOW && card.offer.price < PriceRange.MIDDLE);
-      return cards;
-    }
-    if (housingPrice.value === 'high') {
-      cards = cards.filter((card) =>
-        card.offer.price >= PriceRange.MIDDLE);
-      return cards;
-    }
-    return true;
   };
 
-  const filterRooms = (cards) => {
-    if (housingRooms.value !== DEFAULT_TYPE) {
-      cards = cards.filter((card) =>
-        Number(card.offer.rooms) === Number(housingRooms.value));
+  const filterRooms = (card) => housingRooms.value === DEFAULT_TYPE || Number(card.offer.rooms) === Number(housingRooms.value);
+
+  const filterGuests = (card) => housingGuests.value === DEFAULT_TYPE || Number(card.offer.guests) === Number(housingGuests.value);
+
+  const featuresChecked = housingFeatures.querySelectorAll('[type="checkbox"]:checked');
+  const featureList = Array.from(featuresChecked);
+  const filterFeatures = (card) => {
+    if (featureList.length > 0) {
+      for (const feature of featureList) {
+        if (card.offer.features.includes(feature.value)) {
+          return true;
+        }
+        return false;
+      }
     }
-    return cards;
   };
 
-  const filterGuests = (cards) => {
-    if (housingGuests.value !== DEFAULT_TYPE) {
-      cards = cards.filter((card) =>
-        Number(card.offer.guests) === Number(housingGuests.value));
-    }
-    return cards;
-  };
-
-  const filterFeatures = (cards) => {
-
-    featureChecked.forEach((element) => {//не работает фильтр features
-      cards = cards.filter((card) =>
-        card.offer.features === element.value);
-      return cards;
-    });
-  };
-
-  const updateFilter = (filter) => {
+  const updateFilter = () => {
     clearMarkerGroup();
-    createMarker(filter(offers));
-    offers
-      .slice(0, MAX_OFFERS); //не обрезается до 10
+    const filteredOffers = offers
+      .slice()
+      .filter((offer) =>
+        filterTypes(offer) && filterPrice(offer) && filterRooms(offer) && filterGuests(offer) && filterFeatures(offer))
+      .slice(0, MAX_OFFERS);
+    createMarker(filteredOffers);
+
+    mapFilters.removeEventListener('click', () => { debounce(updateFilter(), DELAY); });
   };
 
-  housingType.addEventListener('change', () => { debounce(updateFilter(filterTypes), DELAY); });
-  housingPrice.addEventListener('change', () => { debounce(updateFilter(filterPrice), DELAY); });
-  housingRooms.addEventListener('change', () => { debounce(updateFilter(filterRooms), DELAY); });
-  housingGuests.addEventListener('change', () => { debounce(updateFilter(filterGuests), DELAY); });
-  housingFeatures.forEach((element) =>
-    element.addEventListener('click', debounce(updateFilter(filterFeatures), DELAY)));
+  mapFilters.addEventListener('click', () => { debounce(updateFilter(), DELAY); });
 };
 
 export { getFilteredOffers };
+
+
