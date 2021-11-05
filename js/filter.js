@@ -1,18 +1,20 @@
 import { debounce } from './utils/debounce.js';
 import { clearMarkerGroup, createMarker } from './map.js';
+import { mapFilters } from './form.js';
 
 const DELAY = 500;
 const MAX_OFFERS = 10;
 
 const DEFAULT_TYPE = 'any';
 
-const mapFilters = document.querySelector('.map__filters');
+// const mapFilters = document.querySelector('.map__filters');
 const housingType = mapFilters.querySelector('#housing-type');
 const housingPrice = mapFilters.querySelector('#housing-price');
 const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
 
 const housingFeatures = mapFilters.querySelector('#housing-features');
+const featuresChecked = housingFeatures.querySelectorAll('[type="checkbox"]:checked');
 
 const getFilteredOffers = (offers) => {
 
@@ -37,8 +39,10 @@ const getFilteredOffers = (offers) => {
 
   const filterGuests = (card) => housingGuests.value === DEFAULT_TYPE || Number(card.offer.guests) === Number(housingGuests.value);
 
-  const featuresChecked = housingFeatures.querySelectorAll('[type="checkbox"]:checked');
+
   const featureList = Array.from(featuresChecked);
+  // console.log(featureList);
+
   const filterFeatures = (card) => {
     if (featureList.length > 0) {
       for (const feature of featureList) {
@@ -53,18 +57,20 @@ const getFilteredOffers = (offers) => {
   const updateFilter = () => {
     clearMarkerGroup();
     const filteredOffers = offers
-      .slice()
+      // .slice()
       .filter((offer) =>
-        filterTypes(offer) && filterPrice(offer) && filterRooms(offer) && filterGuests(offer) && filterFeatures(offer))
+        filterTypes(offer) && filterPrice(offer) && filterRooms(offer) && filterGuests(offer) && filterFeatures())
       .slice(0, MAX_OFFERS);
     createMarker(filteredOffers);
 
-    mapFilters.removeEventListener('click', () => { debounce(updateFilter(), DELAY); });
+    mapFilters.removeEventListener('change', () => { debounce(updateFilter(), DELAY); });
+    housingFeatures.removeEventListener('click', () => { debounce(updateFilter(), DELAY); });
   };
 
-  mapFilters.addEventListener('click', () => { debounce(updateFilter(), DELAY); });
+  mapFilters.addEventListener('change', () => { debounce(updateFilter(), DELAY); });
+  housingFeatures.addEventListener('click', () => { debounce(updateFilter(), DELAY); });
 };
 
-export { getFilteredOffers };
+export { getFilteredOffers, mapFilters };
 
 

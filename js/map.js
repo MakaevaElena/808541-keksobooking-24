@@ -55,14 +55,13 @@ function afterLoad() {
   doFormActive(adForm);
   doFormActive(mapFilters);
   inputAddress.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
-  // const SIMILAR_ADS_COUNT = 5;
+  const SIMILAR_ADS_COUNT = 10;
   getData(
     (dataList) => {
-      createMarker(dataList.slice());
+      createMarker(dataList.slice(0, SIMILAR_ADS_COUNT));
       getFilteredOffers(dataList.slice());
     },
     () => showAlert('данные с сревера не получены'),
-    // (dataList) => getFilteredOffers(dataList.slice()),
   );
 }
 
@@ -96,6 +95,7 @@ const clearAll = () => {
   adForm.reset();
   map.closePopup();
   inputAddress.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
+  mapFilters.reset();
 };
 
 const setReset = () => {
