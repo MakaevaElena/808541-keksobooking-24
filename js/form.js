@@ -77,7 +77,7 @@ const compareCapacitiAndRoomNumber = () => {
     roomNumber.setCustomValidity('вариант 100 комнат только "не для гостей"');
   }
   if (capacity.value === MIN_GUESTS && roomNumber.value !== MAX_ROOMS) {
-    capacity.setCustomValidity('выберите количество комнат');
+    capacity.setCustomValidity('выберите количество гостей');
   }
   roomNumber.reportValidity();
   capacity.reportValidity();
