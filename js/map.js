@@ -1,15 +1,15 @@
 import { adForm, doFormActive, mapFilters } from './form.js';
-import { popupAdsByTemp } from './getSameElements.js';
+import { getCards } from './cards.js';
 import { getData } from './api.js';
 import { showAlert } from './utils/util.js';
 import { getFilteredOffers } from './filter.js';
-
+import { deletePhotos } from './load-photos.js';
 
 const DEFAULT_LAT_LNG = {
   lat: 35.65952,
   lng: 139.78179,
 };
-const RANGE_NUM = 5;
+const RANGE_NUMBER = 5;
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const ZOOM = 12;
@@ -25,10 +25,9 @@ const MARKER = {
 };
 const inputAddress = adForm.querySelector('#address');
 const resetButton = document.querySelector('.ad-form__reset');
-
 const map = L.map('map-canvas').setView(DEFAULT_LAT_LNG, 12);
-
 const markerGroup = L.layerGroup().addTo(map);
+
 const createMarker = (points) => {
   for (let i = 0; i < points.length; i++) {
     const lat = points[i].location.lat;
@@ -45,13 +44,13 @@ const createMarker = (points) => {
       },
     );
     marker.addTo(markerGroup)
-      .bindPopup(popupAdsByTemp(points[i]));
+      .bindPopup(getCards(points[i]));
   }
 };
 
-const clearMarkerGroup = () => markerGroup.clearLayers();  //ф-я очистки слоя меток
+const clearMarkerGroup = () => markerGroup.clearLayers();
 
-function afterLoad() {
+function toDefaultMap() {
   doFormActive(adForm);
   doFormActive(mapFilters);
   inputAddress.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
@@ -85,17 +84,17 @@ mainPinMarker.addTo(map);
 
 mainPinMarker.on('move', (evt) => {
   const { lat, lng } = evt.target.getLatLng();
-  inputAddress.value = `${lat.toFixed(RANGE_NUM)}, ${lng.toFixed(RANGE_NUM)}`;
+  inputAddress.value = `${lat.toFixed(RANGE_NUMBER)}, ${lng.toFixed(RANGE_NUMBER)}`;
 });
 
-// сброс карты и формы
 const clearAll = () => {
   mainPinMarker.setLatLng(DEFAULT_LAT_LNG);
   map.setView(DEFAULT_LAT_LNG, ZOOM);
   adForm.reset();
   map.closePopup();
-  inputAddress.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
   mapFilters.reset();
+  toDefaultMap();
+  deletePhotos();
 };
 
 const setReset = () => {
@@ -105,4 +104,4 @@ const setReset = () => {
   });
 };
 
-export { setReset, clearAll, inputAddress, DEFAULT_LAT_LNG, map, afterLoad, clearMarkerGroup, createMarker };
+export { setReset, clearAll, inputAddress, DEFAULT_LAT_LNG, map, toDefaultMap, clearMarkerGroup, createMarker };

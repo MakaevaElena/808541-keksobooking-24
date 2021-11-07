@@ -4,26 +4,21 @@ import { mapFilters } from './form.js';
 
 const DELAY = 500;
 const MAX_OFFERS = 10;
-
 const DEFAULT_TYPE = 'any';
-
-// const mapFilters = document.querySelector('.map__filters');
 const housingType = mapFilters.querySelector('#housing-type');
 const housingPrice = mapFilters.querySelector('#housing-price');
 const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
-
 const housingFeatures = mapFilters.querySelector('#housing-features');
-const featuresChecked = housingFeatures.querySelectorAll('[type="checkbox"]:checked');
+
+const PriceRange = {
+  LOW: 10000,
+  MIDDLE: 50000,
+};
 
 const getFilteredOffers = (offers) => {
 
   const filterTypes = (card) => housingType.value === DEFAULT_TYPE || housingType.value === card.offer.type;
-
-  const PriceRange = {
-    LOW: 10000,
-    MIDDLE: 50000,
-  };
 
   const filterPrice = (card) => {
     switch (housingPrice.value) {
@@ -39,19 +34,21 @@ const getFilteredOffers = (offers) => {
 
   const filterGuests = (card) => housingGuests.value === DEFAULT_TYPE || Number(card.offer.guests) === Number(housingGuests.value);
 
-
-  const featureList = Array.from(featuresChecked);
-  // console.log(featureList);
-
   const filterFeatures = (card) => {
-    if (featureList.length > 0) {
-      for (const feature of featureList) {
-        if (card.offer.features.includes(feature.value)) {
-          return true;
+    const featuresChecked = housingFeatures.querySelectorAll('[type="checkbox"]:checked');
+    const featureList = Array.from(featuresChecked);
+
+    if (card.offer.features) {
+      if (featureList.length > 0) {
+        for (const feature of featureList) {
+          if (!card.offer.features.includes(feature.value)) {
+            return false;
+          }
         }
-        return false;
       }
+      return true;
     }
+    return true;
   };
 
   const updateFilter = () => {
@@ -59,7 +56,7 @@ const getFilteredOffers = (offers) => {
     const filteredOffers = offers
       // .slice()
       .filter((offer) =>
-        filterTypes(offer) && filterPrice(offer) && filterRooms(offer) && filterGuests(offer) && filterFeatures())
+        filterTypes(offer) && filterPrice(offer) && filterRooms(offer) && filterGuests(offer) && filterFeatures(offer))
       .slice(0, MAX_OFFERS);
     createMarker(filteredOffers);
 

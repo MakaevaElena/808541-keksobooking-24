@@ -3,6 +3,17 @@ import { sendData } from './api.js';
 
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
+const title = adForm.querySelector('#title');
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
+const price = adForm.querySelector('#price');
+const type = adForm.querySelector('#type');
+const roomNumber = adForm.querySelector('#room_number');
+const capacity = adForm.querySelector('#capacity');
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+const MAX_ROOMS = '100';
+const MIN_GUESTS = '0';
 
 const doFormDisable = (form) => {
   form.classList.add(`${form.classList[0]}--disabled`);
@@ -22,19 +33,6 @@ function doFormActive(form) {
   });
 }
 
-// ВАЛИДАЦИЯ ФОРМЫ
-const title = adForm.querySelector('#title');
-const timeIn = adForm.querySelector('#timein');
-const timeOut = adForm.querySelector('#timeout');
-const price = adForm.querySelector('#price');
-const type = adForm.querySelector('#type');
-const roomNumber = adForm.querySelector('#room_number');
-const capacity = adForm.querySelector('#capacity');
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
-const MAX_GUESTS = '100';
-const MIN_GUESTS = '0';
-
 const selectMinPrice = () => {
   price.min = GLOSSARY_TYPES[type.value].price;
   price.placeholder = GLOSSARY_TYPES[type.value].price;
@@ -52,7 +50,7 @@ title.addEventListener('input', () => {
   }
   title.reportValidity();
 });
-//синхронизация типа жилья и цены
+
 type.addEventListener('change', () => {
   price.style = '';
   if (Number(price.value) < Number(GLOSSARY_TYPES[type.value].price)) {
@@ -61,7 +59,7 @@ type.addEventListener('change', () => {
   if (Number(price.value) > Number(price.max)) {
     price.setCustomValidity(`Цена должна быть не более ${Number(price.max)}`);
   }
-  price.setCustomValidity(''); // если перенести наверх - появляется баг, при вводе цены без переключения нет сравнения
+  price.setCustomValidity('');
   price.reportValidity();
 });
 
@@ -72,9 +70,9 @@ roomNumber.addEventListener('change', () => {
     roomNumber.setCustomValidity('количество комнат недостаточно');
     roomNumber.style = 'border: 2px solid red';
   }
-  if (roomNumber.value === MAX_GUESTS) {
+  if (roomNumber.value === MAX_ROOMS) {
     capacity.value = MIN_GUESTS;
-    capacity.setCustomValidity('не для гостей');
+    roomNumber.setCustomValidity('вариант 100 комнат только "не для гостей"');
   }
   roomNumber.reportValidity();
 });
@@ -86,22 +84,20 @@ capacity.addEventListener('change', () => {
     capacity.setCustomValidity('для указанного количества гостей комнат недостаточно');
     capacity.style = 'border: 2px solid red';
   }
-  if (roomNumber.value === MAX_GUESTS) {
+  if (capacity.value === MIN_GUESTS) {
+    roomNumber.value = MAX_ROOMS;
     capacity.value = MIN_GUESTS;
-    capacity.setCustomValidity('не для гостей');
-    roomNumber.setCustomValidity('не для гостей');
+    capacity.setCustomValidity('"не для гостей" подходит вариант 100 комнат ');
   }
   capacity.reportValidity();
 });
-// синхронизация времени
+
 timeOut.addEventListener('change', () => {
   timeIn.value = timeOut.value;
 });
 timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
 });
-
-// отправка формы на сервер
 
 const successMessageEscape = (evt) => {
   const popupSuccess = document.querySelector('.success');
@@ -143,7 +139,6 @@ const createErrorMesage = () => {
   document.body.appendChild(errorPopUp);
 };
 
-// отправка формы и сброс
 const setUserFormSubmit = (callback) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();

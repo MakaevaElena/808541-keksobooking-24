@@ -2,8 +2,7 @@ import { GLOSSARY_TYPES } from './data.js';
 
 const IMG_WIDTH = 45;
 const IMG_HEIGHT = 40;
-
-const offerKeys = {
+const OFFER_KEYS = {
   title: 'title',
   address: 'text--address',
   price: 'text--price',
@@ -17,14 +16,18 @@ const offerKeys = {
   photos: 'photos',
 };
 
-const similarAdvertismentTemplate = document.querySelector('#card').content.querySelector('.popup');
+const similarCardsTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const popupAdsByTemp = (dataList) => {
-  const element = similarAdvertismentTemplate.cloneNode(true);
+const getCards = (dataList) => {
+  const element = similarCardsTemplate.cloneNode(true);
+  const cardFeaturesList = element.querySelector('.popup__features');
+  const cardFeatures = cardFeaturesList.querySelectorAll('.popup__feature');
+  const cardPhotoList = element.querySelector('.popup__photos');
+  const cardPhotos = cardPhotoList.querySelector('.popup__photo');
 
-  Object.keys(dataList.offer).forEach((key) => { // проверка на наличие элементов
+  Object.keys(dataList.offer).forEach((key) => {
     if (!key) {
-      element.querySelector(`.popup__${offerKeys[key]}`).classList.add('hidden');
+      element.querySelector(`.popup__${OFFER_KEYS[key]}`).classList.add('hidden');
     }
   });
 
@@ -34,22 +37,17 @@ const popupAdsByTemp = (dataList) => {
   element.querySelector('.popup__type').textContent = GLOSSARY_TYPES[dataList.offer.type].rus;
   element.querySelector('.popup__text--capacity').textContent = `${dataList.offer.rooms} комнаты для ${dataList.offer.guests} гостей`;
   element.querySelector('.popup__text--time').textContent = `Заезд после ${dataList.offer.checkin}, выезд до ${dataList.offer.checkout}`;
-  const tempFeaturesList = element.querySelector('.popup__features');
-  const tempFeatures = tempFeaturesList.querySelectorAll('.popup__feature');
-  tempFeatures.forEach((tempFeature) => {
+  element.querySelector('.popup__description').textContent = dataList.offer.description;
+
+  cardFeatures.forEach((cardFeature) => {
     if (dataList.offer.features) {
       const isNessesary = dataList.offer.features.some(
-        (feature) => tempFeature.classList.contains(`popup__feature--${feature}`));// перебираем коллекцию popup__feature и сравниваем с входными данными.
+        (feature) => cardFeature.classList.contains(`popup__feature--${feature}`));
       if (!isNessesary) {
-        tempFeature.remove();
+        cardFeature.remove();
       }
     }
   });
-
-  element.querySelector('.popup__description').textContent = dataList.offer.description;
-
-  const tempPhotoList = element.querySelector('.popup__photos');
-  const tempPhotos = tempPhotoList.querySelector('.popup__photo');
 
   if (dataList.offer.photos) {
     for (let i = 0; i < dataList.offer.photos.length; i++) {
@@ -59,16 +57,17 @@ const popupAdsByTemp = (dataList) => {
       img.alt = 'Фотография жилья';
       img.width = IMG_WIDTH;
       img.height = IMG_HEIGHT;
-      tempPhotoList.appendChild(img);
+      cardPhotoList.appendChild(img);
     }
-    tempPhotos.remove();
   }
+  cardPhotos.remove();
 
   if (!dataList.author.avatar) {
     element.querySelector('.popup__avatar').classList.add('hidden');
   }
   element.querySelector('.popup__avatar').src = dataList.author.avatar;
   return element;
+
 };
 
-export { popupAdsByTemp };
+export { getCards };
