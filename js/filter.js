@@ -66,5 +66,3 @@ const getFilteredOffers = (offers) => {
 };
 
 export { getFilteredOffers, mapFilters };
-
-

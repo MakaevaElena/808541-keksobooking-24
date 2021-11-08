@@ -24,14 +24,17 @@ const doFormDisable = (form) => {
   });
 };
 
-function doFormActive(form) {
+const doFormActive = (form) => {
   form.classList.remove(`${form.classList[0]}--disabled`);
 
   const formChildren = Array.from(form.children);
   formChildren.forEach((element) => {
     element.removeAttribute('disabled', 'disabled');
   });
-}
+};
+
+doFormDisable(adForm);
+doFormDisable(mapFilters);
 
 const selectMinPrice = () => {
   price.min = GLOSSARY_TYPES[type.value].price;
@@ -145,4 +148,4 @@ const setUserFormSubmit = (callback) => {
   });
 };
 
-export { setUserFormSubmit, adForm, mapFilters, doFormDisable, doFormActive };
+export { setUserFormSubmit, adForm, mapFilters, doFormActive };
