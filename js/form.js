@@ -140,11 +140,13 @@ const setUserFormSubmit = (callback) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
-      () => createSuccessMesage(),
+      () => {
+        createSuccessMesage();
+        callback();
+      },
       () => createErrorMesage(),
       new FormData(evt.target),
     );
-    callback();
   });
 };
 
