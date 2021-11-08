@@ -1,6 +1,10 @@
 import { GLOSSARY_TYPES } from './data.js';
 import { sendData } from './api.js';
 
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+const MAX_ROOMS = '100';
+const MIN_GUESTS = '0';
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 const title = adForm.querySelector('#title');
@@ -10,10 +14,6 @@ const price = adForm.querySelector('#price');
 const type = adForm.querySelector('#type');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
-const MAX_ROOMS = '100';
-const MIN_GUESTS = '0';
 
 const doFormDisable = (form) => {
   form.classList.add(`${form.classList[0]}--disabled`);
@@ -63,7 +63,7 @@ type.addEventListener('change', () => {
   price.reportValidity();
 });
 
-const compareCapacitiAndRoomNumber = () => {
+const compareCapacityAndRoomNumber = () => {
   roomNumber.setCustomValidity('');
   roomNumber.style = '';
   capacity.setCustomValidity('');
@@ -83,9 +83,8 @@ const compareCapacitiAndRoomNumber = () => {
   capacity.reportValidity();
 };
 
-roomNumber.addEventListener('change', () => { compareCapacitiAndRoomNumber(); });
-capacity.addEventListener('change', () => { compareCapacitiAndRoomNumber(); });
-
+roomNumber.addEventListener('change', () => { compareCapacityAndRoomNumber(); });
+capacity.addEventListener('change', () => { compareCapacityAndRoomNumber(); });
 
 timeOut.addEventListener('change', () => {
   timeIn.value = timeOut.value;

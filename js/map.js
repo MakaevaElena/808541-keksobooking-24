@@ -26,14 +26,15 @@ const MARKER = {
 const inputAddress = adForm.querySelector('#address');
 const resetButton = document.querySelector('.ad-form__reset');
 const map = L.map('map-canvas').setView(DEFAULT_LAT_LNG, 12);
+// const map = L.map('map-canvas').on('load', onDefaultMap).setView(DEFAULT_LAT_LNG, 12);
+
 const markerGroup = L.layerGroup().addTo(map);
 
 const createMarker = (points) => {
-  for (let i = 0; i < points.length; i++) {
-    const lat = points[i].location.lat;
-    const lng = points[i].location.lng;
+  points.forEach((point) => {
+    const lat = point.location.lat;
+    const lng = point.location.lng;
     const icon = L.icon(MARKER);
-
     const marker = L.marker(
       {
         lat,
@@ -44,13 +45,13 @@ const createMarker = (points) => {
       },
     );
     marker.addTo(markerGroup)
-      .bindPopup(getCards(points[i]));
-  }
+      .bindPopup(getCards(point));
+  });
 };
 
 const clearMarkerGroup = () => markerGroup.clearLayers();
 
-function toDefaultMap() {
+const onDefaultMap = () => {
   doFormActive(adForm);
   doFormActive(mapFilters);
   inputAddress.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
@@ -62,7 +63,7 @@ function toDefaultMap() {
     },
     () => showAlert('данные с сревера не получены'),
   );
-}
+};
 
 L.tileLayer(
   TILE_LAYER,
@@ -93,7 +94,7 @@ const clearAll = () => {
   adForm.reset();
   map.closePopup();
   mapFilters.reset();
-  toDefaultMap();
+  onDefaultMap();
   deletePhotos();
 };
 
@@ -104,4 +105,4 @@ const setReset = () => {
   });
 };
 
-export { setReset, clearAll, inputAddress, DEFAULT_LAT_LNG, map, toDefaultMap, clearMarkerGroup, createMarker };
+export { setReset, clearAll, inputAddress, DEFAULT_LAT_LNG, map, onDefaultMap, clearMarkerGroup, createMarker };

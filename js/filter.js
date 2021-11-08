@@ -38,12 +38,10 @@ const getFilteredOffers = (offers) => {
     const featuresChecked = housingFeatures.querySelectorAll('[type="checkbox"]:checked');
     const featureList = Array.from(featuresChecked);
 
-    if (card.offer.features) {
-      if (featureList.length > 0) {
-        for (const feature of featureList) {
-          if (!card.offer.features.includes(feature.value)) {
-            return false;
-          }
+    if (card.offer.features && featureList.length > 0) {
+      for (const feature of featureList) {
+        if (!card.offer.features.includes(feature.value)) {
+          return false;
         }
       }
       return true;
@@ -54,7 +52,6 @@ const getFilteredOffers = (offers) => {
   const updateFilter = () => {
     clearMarkerGroup();
     const filteredOffers = offers
-      // .slice()
       .filter((offer) =>
         filterTypes(offer) && filterPrice(offer) && filterRooms(offer) && filterGuests(offer) && filterFeatures(offer))
       .slice(0, MAX_OFFERS);
