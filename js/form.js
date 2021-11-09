@@ -36,11 +36,11 @@ const doFormActive = (form) => {
 doFormDisable(adForm);
 doFormDisable(mapFilters);
 
-const selectMinPrice = () => {
+const onSelectMinPrice = () => {
   price.min = GLOSSARY_TYPES[type.value].price;
   price.placeholder = GLOSSARY_TYPES[type.value].price;
 };
-type.addEventListener('change', selectMinPrice);
+type.addEventListener('change', onSelectMinPrice);
 
 title.addEventListener('input', () => {
   title.setCustomValidity('');
@@ -96,34 +96,34 @@ timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
 });
 
-const successMessageEscape = (evt) => {
+const onSuccessMessageEscape = (evt) => {
   const popupSuccess = document.querySelector('.success');
   evt.preventDefault();
   if (evt.key === 'Escape') {
     popupSuccess.remove();
   }
   popupSuccess.remove();
-  document.removeEventListener('keydown', successMessageEscape);
-  document.removeEventListener('click', successMessageEscape);
+  document.removeEventListener('keydown', onSuccessMessageEscape);
+  document.removeEventListener('click', onSuccessMessageEscape);
 };
 
-const errorMessageEscape = (evt) => {
+const onErrorMessageEscape = (evt) => {
   const popupError = document.querySelector('.error');
   evt.preventDefault();
   if (evt.key === 'Escape') {
     popupError.remove();
   }
   popupError.remove();
-  document.removeEventListener('keydown', errorMessageEscape);
-  document.removeEventListener('click', errorMessageEscape);
+  document.removeEventListener('keydown', onErrorMessageEscape);
+  document.removeEventListener('click', onErrorMessageEscape);
 };
 
 const successMesage = document.querySelector('#success')
   .content;
 const createSuccessMesage = () => {
   const successPopUp = successMesage.cloneNode(true);
-  document.addEventListener('keydown', successMessageEscape);
-  document.addEventListener('click', successMessageEscape);
+  document.addEventListener('keydown', onSuccessMessageEscape);
+  document.addEventListener('click', onSuccessMessageEscape);
   document.body.appendChild(successPopUp);
 };
 
@@ -131,8 +131,8 @@ const errorMesage = document.querySelector('#error')
   .content;
 const createErrorMesage = () => {
   const errorPopUp = errorMesage.cloneNode(true);
-  document.addEventListener('keydown', errorMessageEscape);
-  document.addEventListener('click', errorMessageEscape);
+  document.addEventListener('keydown', onErrorMessageEscape);
+  document.addEventListener('click', onErrorMessageEscape);
   document.body.appendChild(errorPopUp);
 };
 

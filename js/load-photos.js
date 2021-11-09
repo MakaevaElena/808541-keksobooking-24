@@ -1,3 +1,6 @@
+const IMG_WIDTH = 70;
+const IMG_HEIGHT = 70;
+const AVATAR_SRC = 'img/muffin-grey.svg';
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const avatarChooser = document.querySelector('.ad-form-header__input');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
@@ -22,8 +25,8 @@ photoChooser.addEventListener('change', () => {
 
   if (matches) {
     const img = document.createElement('img');
-    img.width = 70;
-    img.height = 70;
+    img.width = IMG_WIDTH;
+    img.height = IMG_HEIGHT;
     img.alt = 'фото жилья';
     img.src = URL.createObjectURL(photo);
     photoContainer.appendChild(img);
@@ -31,7 +34,7 @@ photoChooser.addEventListener('change', () => {
 });
 
 const deletePhotos = () => {
-  avatarPreview.src = 'img/muffin-grey.svg';
+  avatarPreview.src = AVATAR_SRC;
   photoContainer.innerHTML = '';
 };
 

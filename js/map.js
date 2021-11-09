@@ -5,6 +5,9 @@ import { showAlert } from './utils/util.js';
 import { getFilteredOffers } from './filter.js';
 import { deletePhotos } from './load-photos.js';
 
+const RANGE_NUMBER = 5;
+const ZOOM = 12;
+const SIMILAR_ADS_COUNT = 10;
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const DEFAULT_LAT_LNG = {
@@ -21,8 +24,6 @@ const MARKER = {
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 };
-const RANGE_NUMBER = 5;
-const ZOOM = 12;
 
 const inputAddress = adForm.querySelector('#address');
 const resetButton = document.querySelector('.ad-form__reset');
@@ -46,14 +47,13 @@ const createMarker = (points) => {
 };
 
 const onDefaultMap = () => {
-  doFormActive(adForm);
-  doFormActive(mapFilters);
   inputAddress.value = `${DEFAULT_LAT_LNG.lat},${DEFAULT_LAT_LNG.lng}`;
-  const SIMILAR_ADS_COUNT = 10;
   getData(
     (dataList) => {
       createMarker(dataList.slice(0, SIMILAR_ADS_COUNT));
       getFilteredOffers(dataList.slice());
+      doFormActive(adForm);
+      doFormActive(mapFilters);
     },
     () => showAlert('данные с сревера не получены'),
   );
@@ -82,9 +82,10 @@ const mainPinMarker = L.marker(
 );
 mainPinMarker.addTo(map);
 
-mainPinMarker.on('move', (evt) => {
+mainPinMarker.on('moveend', (evt) => {
   const { lat, lng } = evt.target.getLatLng();
   inputAddress.value = `${lat.toFixed(RANGE_NUMBER)}, ${lng.toFixed(RANGE_NUMBER)}`;
+  map.setView(evt.target.getLatLng(), ZOOM);
 });
 
 const clearAll = () => {
