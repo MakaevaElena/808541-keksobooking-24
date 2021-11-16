@@ -1,6 +1,6 @@
 # Личный проект «Кексобукинг»
 
-<img width="769" alt="" src="img/sreenshot.png">
+<a href="https://makaevaelena.github.io/808541-keksobooking-24/"><img align="left" width="500" height="" alt="screenshot" src="img/screenshot.png"></a>
 
 * Студент: [Елена Mакаева](https://up.htmlacademy.ru/javascript/24/user/808541).
 * Наставник: [Денис Байдаров](https://htmlacademy.ru/profile/4er).
