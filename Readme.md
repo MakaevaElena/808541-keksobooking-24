@@ -1,6 +1,6 @@
 # Личный проект «Кексобукинг»
 
-* [sreenshot](img/sreenshot.png).
+<img width="769" alt="" src="./img/sreenshot.png">
 
 * Студент: [Елена Mакаева](https://up.htmlacademy.ru/javascript/24/user/808541).
 * Наставник: [Денис Байдаров](https://htmlacademy.ru/profile/4er).
